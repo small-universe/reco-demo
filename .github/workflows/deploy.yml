@@ -29,7 +29,8 @@ jobs:
         if: steps.node-modules.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
 
-      - name: Build reco-demo
+      # 构建项目并
+      - name: Build and zip
         run: |
           yarn run build
           zip -r dist.zip .vuepress/dist
@@ -47,15 +48,14 @@ jobs:
 
       - name: Scp file to aliyun
         uses: appleboy/scp-action@master
-
         with:
           # IP地址
           host: ${{ secrets.ALIYUN_SERVER_IP }}
-          # 用户
-          username: ${{ secrets.ALIYUN_SERVER_USER }}
+          # 用户，如：root等
+          username: ${{ secrets.ALIYUN_SERVER_USERNAME }}
           # 密码
           password: ${{ secrets.ALIYUN_SERVER_PASSWORD }}
-          # ssh端口
+          # ssh端口，如：22
           port: ${{ secrets.ALIYUN_SERVER_PORT }}
           source: "dist.zip"
           # 将文件拷贝到服务器
@@ -66,12 +66,13 @@ jobs:
         with:
           # IP地址
           host: ${{ secrets.ALIYUN_SERVER_IP }}
-          # 用户
-          username: ${{ secrets.ALIYUN_SERVER_USER }}
+          # 用户，如:root等
+          username: ${{ secrets.ALIYUN_SERVER_USERNAME }}
           # 密码
           password: ${{ secrets.ALIYUN_SERVER_PASSWORD }}
-          # ssh端口
+          # ssh端口，如：22
           port: ${{ secrets.ALIYUN_SERVER_PORT }}
+          # 先备份再解压
           script: |
             cd /home
             echo "################# files moving #################"
