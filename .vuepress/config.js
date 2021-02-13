@@ -7,7 +7,9 @@ module.exports = {
   title: "reco-demo", // 显示在左上角的网页名称以及首页在浏览器标签显示的title名称
   description: "A blog template with vuepress-theme-reco.", // meta 中的描述文字，用于SEO
   // base: "/reco-demo/",
-  head: [
+
+  serviceWorker: true, // 是否开启 PWA
+  head: [ //PWA设置
     ["link", { rel: "icon", href: "/favicon.svg" }], //浏览器的标签栏的网页图标,基地址/docs/.vuepress/public
     [
       "meta",
@@ -33,7 +35,7 @@ module.exports = {
         location: 3, // 在导航栏菜单中所占的位置，默认3
         text: "标签", // 默认 “标签”
       },
-      socialLinks: [
+      socialLinks: [ // 信息栏展示社交信息
         { icon: "reco-github", link: "https://github.com/small-universe" },
         { icon: "reco-qq", link: "tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1715261428" },
         { icon: "reco-mail", link: "mailto:18846770224@163.com" },
