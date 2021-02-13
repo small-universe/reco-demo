@@ -29,7 +29,7 @@ jobs:
         if: steps.node-modules.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
 
-      # 构建项目并
+      # 构建项目并压缩为dist.zip
       - name: Build and zip
         run: |
           yarn run build
@@ -47,6 +47,7 @@ jobs:
           BRANCH: gh-pages
           FOLDER: .vuepress/dist
 
+      # Scp脚本拷贝dist.zip到服务器
       - name: Scp file to aliyun
         uses: appleboy/scp-action@master
         with:
@@ -62,6 +63,7 @@ jobs:
           # 将文件拷贝到服务器
           target: "/home"
 
+      # 备份、解压、删除
       - name: Backup and unzip
         uses: appleboy/ssh-action@master
         with:
@@ -75,16 +77,18 @@ jobs:
           port: ${{ secrets.ALIYUN_SERVER_PORT }}
           # 先备份再解压
           script: |
-            cd /home
-            echo "################# files moving #################"
+            echo "################# files remove #################"
             if [ -f "/home/reco-demo-bak" ];then
               rm -rf /home/reco-demo-bak
               echo "reco-demo-bak exists and is deleted"
             fi
-
+            echo "################# files backup #################"
             if [ -f "/home/reco-demo" ];then
               mv /home/reco-demo /home/reco-demo-bak
               echo "reco-demo exists and is backuped"
             fi
-
+            echo "################# unzip dist.zip #################"
             unzip -od  /home/reco-demo /home/dist.zip
+
+            echo "################# remove dist.zip #################"
+            rm -f /home/dist.zip
