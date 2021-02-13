@@ -46,9 +46,7 @@ jobs:
 
       - name: Scp file to aliyun
         uses: appleboy/scp-action@master
-        run:
-          # 先压缩文件
-          zip -r dist.zip .vuepress/dist
+        run: zip -r dist.zip .vuepress/dist  # 先压缩文件
         with:
           # IP地址
           host: ${{ secrets.ALIYUN_SERVER_IP }}
