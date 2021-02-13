@@ -4,7 +4,7 @@
   "author": "nanci",
   "scripts": {
     "dev": "vuepress dev . --open --host \"localhost\"",
-    "build": "vuepress build .",
+    "build": "vuepress build . --dest dist",
     "deploy": "deploy.sh"
   },
   "devDependencies": {
