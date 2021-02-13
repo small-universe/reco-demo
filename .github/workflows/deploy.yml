@@ -33,7 +33,8 @@ jobs:
       - name: Build and zip
         run: |
           yarn run build
-          zip -r dist.zip .vuepress/dist
+          cd ./vuepress
+          zip -r dist.zip dist
         env:
           LEANCLOUD_APP_ID: ${{ secrets.LEANCLOUD_APP_ID }} # 评论系统的ID
           LEANCLOUD_APP_KEY: ${{ secrets.LEANCLOUD_APP_KEY }} # 评论系统的KEY
