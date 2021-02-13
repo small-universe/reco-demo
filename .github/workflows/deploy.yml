@@ -86,4 +86,4 @@ jobs:
               echo "reco-demo exists and is backuped"
             fi
 
-            unzip -d /home/dist.zip /home/reco-demo
+            unzip -d  /home/reco-demo /home/dist.zip
