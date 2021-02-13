@@ -30,7 +30,8 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Build reco-demo
-        run: yarn run build
+        run: |
+          yarn run build
         env:
           LEANCLOUD_APP_ID: ${{ secrets.LEANCLOUD_APP_ID }} # 评论系统的ID
           LEANCLOUD_APP_KEY: ${{ secrets.LEANCLOUD_APP_KEY }} # 评论系统的KEY
@@ -43,20 +44,46 @@ jobs:
           BRANCH: gh-pages
           FOLDER: .vuepress/dist
 
+      - name: Scp file to aliyun
+          uses: appleboy/scp-action@master
+          run:
+            # 先压缩文件
+            zip -r dist.zip .vuepress/dist
+          with:
+            # IP地址
+            host: ${{ secrets.ALIYUN_SERVER_IP }}
+            # 用户
+            username: ${{ secrets.ALIYUN_SERVER_USER }}
+            # 密码
+            password: ${{ secrets.ALIYUN_SERVER_PASSWORD }}
+            # ssh端口
+            port: ${{ secrets.ALIYUN_SERVER_PORT }}
+            source: "dist.zip"
+            # 将文件拷贝到服务器
+            target: "/home"
 
-      # 部署到阿里云
-      - name: Deploy To Aliyun
-        uses: easingthemes/ssh-deploy@v2.1.5
-        env:
-          # 私钥
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          # scp参数
-          ARGS: "-avzr --delete"
-          # 源目录，编译后生成的文件目录
-          SOURCE: ".vuepress/dist"
-          # 服务器ip：换成你的服务器IP
-          REMOTE_HOST: ${{ secrets.ALIYUN_SERVER_IP }}
-          # 用户，如: root
-          REMOTE_USER: ${{ secrets.ALIYUN_SERVER_USER }}
-          # 目标地址 你在服务器上部署代码的地方
-          TARGET: "/root/web/reco-demo"
+      - name: Backup and unzip
+          uses: appleboy/ssh-action@master
+          with:
+            # IP地址
+            host: ${{ secrets.ALIYUN_SERVER_IP }}
+            # 用户
+            username: ${{ secrets.ALIYUN_SERVER_USER }}
+            # 密码
+            password: ${{ secrets.ALIYUN_SERVER_PASSWORD }}
+            # ssh端口
+            port: ${{ secrets.ALIYUN_SERVER_PORT }}
+            script: |
+              cd /home
+              echo "################# files moving #################"
+              if [ -f "/home/reco-demo-bak" ];then
+                rm -rf /home/reco-demo-bak
+                echo "reco-demo-bak exists and is deleted"
+              fi
+
+              if [ -f "/home/reco-demo" ];then
+                mv /home/reco-demo /home/reco-demo-bak
+                echo "reco-demo exists and is backuped"
+              fi
+
+              unzip -d /home/dist.zip /home/reco-demo
