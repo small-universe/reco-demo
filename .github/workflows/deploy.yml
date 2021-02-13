@@ -32,6 +32,7 @@ jobs:
       - name: Build reco-demo
         run: |
           yarn run build
+          zip -r dist.zip .vuepress/dist
         env:
           LEANCLOUD_APP_ID: ${{ secrets.LEANCLOUD_APP_ID }} # 评论系统的ID
           LEANCLOUD_APP_KEY: ${{ secrets.LEANCLOUD_APP_KEY }} # 评论系统的KEY
@@ -46,7 +47,7 @@ jobs:
 
       - name: Scp file to aliyun
         uses: appleboy/scp-action@master
-        run: zip -r dist.zip .vuepress/dist  # 先压缩文件
+
         with:
           # IP地址
           host: ${{ secrets.ALIYUN_SERVER_IP }}
