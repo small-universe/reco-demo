@@ -35,9 +35,28 @@ jobs:
           LEANCLOUD_APP_ID: ${{ secrets.LEANCLOUD_APP_ID }} # 评论系统的ID
           LEANCLOUD_APP_KEY: ${{ secrets.LEANCLOUD_APP_KEY }} # 评论系统的KEY
 
+      # 部署到gh-pages分支
       - name: Deploy To gh-pages
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           BRANCH: gh-pages
           FOLDER: .vuepress/dist
+
+
+      # 部署到阿里云
+      - name: Deploy To Aliyun
+        uses: easingthemes/ssh-deploy@v2.1.5
+        env:
+          # 私钥
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          # scp参数
+          ARGS: "-avzr --delete"
+          # 源目录，编译后生成的文件目录
+          SOURCE: ".vuepress/dist"
+          # 服务器ip：换成你的服务器IP
+          REMOTE_HOST: ${{ secrets.ALIYUN_SERVER_IP }}
+          # 用户，如: root
+          REMOTE_USER: ${{ secrets.ALIYUN_SERVER_USER }}
+          # 目标地址 你在服务器上部署代码的地方
+          TARGET: "/root/web/reco-demo"
