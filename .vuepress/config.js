@@ -1,4 +1,4 @@
-const sidebar = require('./config/sidebar')
+const sidebar = require('./config/sidebar/index')
 const nav = require('./config/navbar')
 
 module.exports = {
