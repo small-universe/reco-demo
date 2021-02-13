@@ -33,6 +33,7 @@ jobs:
       - name: Build and zip
         run: |
           yarn run build
+          cd .vuepress
           zip -r dist.zip ./dist
         env:
           LEANCLOUD_APP_ID: ${{ secrets.LEANCLOUD_APP_ID }} # 评论系统的ID
@@ -44,7 +45,7 @@ jobs:
         with:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           BRANCH: gh-pages
-          FOLDER: dist
+          FOLDER: .vuepress/dist
 
       # Scp脚本拷贝dist.zip到服务器
       - name: Scp file to aliyun
@@ -58,7 +59,7 @@ jobs:
           password: ${{ secrets.ALIYUN_SERVER_PASSWORD }}
           # ssh端口，如：22
           port: ${{ secrets.ALIYUN_SERVER_PORT }}
-          source: "dist.zip"
+          source: ".vuepress/dist.zip"
           # 将文件拷贝到服务器
           target: "/home"
 
