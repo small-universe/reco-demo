@@ -2,17 +2,15 @@
   "name": "reco-demo",
   "version": "1.0.0",
   "author": "nanci",
+  "description": "Create a blog template with vuepress-theme-reco.",
   "scripts": {
     "dev": "vuepress dev . --open --host \"localhost\"",
     "build": "vuepress build .",
     "deploy": "deploy.sh"
   },
-  "devDependencies": {
-    "vuepress": "^1.8.1",
-    "vuepress-theme-reco": "1.6.1"
-  },
-  "description": "Create a blog template with vuepress-theme-reco.",
   "dependencies": {
+    "vuepress": "^1.8.1",
+    "vuepress-theme-reco": "1.6.1",
     "@mr-hope/vuepress-plugin-copy-code": "^1.9.6",
     "@vuepress-reco/vuepress-plugin-rss": "^1.0.2",
     "@vuepress/plugin-nprogress": "^1.8.1",

@@ -3,14 +3,13 @@ const nav = require('./config/navbar')
 
 module.exports = {
   host: "127.0.0.1", // 生成网页地址（本地调试使用）
-  port: "65535", // 生成网页端口（本地调试使用）
+  port: "8070", // 生成网页端口（本地调试使用）
   title: "reco-demo", // 显示在左上角的网页名称以及首页在浏览器标签显示的title名称
   description: "A blog template with vuepress-theme-reco.", // meta 中的描述文字，用于SEO
   // base: "/reco-demo/",
 
-  serviceWorker: true, // 是否开启 PWA
-  head: [ //PWA设置
-    ["link", { rel: "icon", href: "/favicon.svg" }], //浏览器的标签栏的网页图标,基地址/docs/.vuepress/public
+  head: [
+    ["link", { rel: "icon", href: "/favicon.svg" }], //浏览器的标签栏的网页图标,基地址/.vuepress/public
     [
       "meta",
       {

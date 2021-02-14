@@ -9,22 +9,23 @@ jobs:
   deploy-gh-pages:
     runs-on: ubuntu-latest
     steps:
+      # 获取源码
       - name: Checkout
-        uses: actions/checkout@master
+        uses: actions/checkout@v2
         with:
           persist-credentials: false
           ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
           submodules: true
           fetch-depth: 0
-
-      - uses: actions/cache@master
+      # 缓存依赖项配置
+      - uses: actions/cache@v2
         id: node-modules
         with:
           path: node_modules/
           key: ${{ runner.os }}-node-modules-${{ hashFiles('yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-node-modules-
-
+      # 安装依赖
       - name: Install Deps
         if: steps.node-modules.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
@@ -61,7 +62,7 @@ jobs:
           port: ${{ secrets.ALIYUN_SERVER_PORT }}
           source: ".vuepress/dist.zip"
           # 将文件拷贝到服务器
-          target: "/home"
+          target: "/home/tmp"
 
       # 备份、解压、删除
       - name: Backup and unzip
@@ -78,17 +79,16 @@ jobs:
           # 先备份再解压
           script: |
             echo "################# files remove #################"
-            if [ -f "/home/reco-demo-bak" ];then
-              rm -rf /home/reco-demo-bak
+            if [ -f "/home/web/reco-demo-bak" ];then
+              rm -rf /home/web/reco-demo-bak
               echo "reco-demo-bak exists and is deleted"
             fi
             echo "################# files backup #################"
-            if [ -f "/home/reco-demo" ];then
-              mv /home/reco-demo /home/reco-demo-bak
+            if [ -f "/home/web/reco-demo" ];then
+              mv /home/web/reco-demo /home/web/reco-demo-bak
               echo "reco-demo exists and is backuped"
+            else
+              mkdir /home/web/reco-demo
             fi
             echo "################# unzip dist.zip #################"
-            unzip -od  /home/reco-demo /home/dist.zip
-
-#            echo "################# remove dist.zip #################"
-#            rm -f /home/dist.zip
+            unzip -od  /home/web/reco-demo /home/tmp/dist.zip
